@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 
-
-
-
 class App extends Component {
 //function App() {
 
   constructor(props) {
     super(props);
     this.state = {
-      productos: []
+      productos: [],
+      recuperado: false
     }
   }
 
@@ -20,12 +18,13 @@ class App extends Component {
         return response.json()
       })
       .then((prod) => {
-        this.setState({ productos: prod })
+        this.setState({ productos: prod,
+                        recuperado: true
+        })
       })    
   } 
 
-
-  render() {
+  mostrarTabla() {
     return (
       <div>
         <table border="1">
@@ -37,12 +36,12 @@ class App extends Component {
           </tr>
         </thead>
         <tbody>  
-          {this.state.productos.map(producto => {
+          {this.state.productos.map(prod => {
             return (
-              <tr key={producto.codigo}>
-                <td>{producto.codigo}</td>
-                <td>{producto.descripcion}</td>
-                <td>{producto.precio}</td>
+              <tr key={ prod.codigo}>
+                <td>{ prod.codigo}</td>
+                <td>{ prod.descripcion}</td>
+                <td>{ prod.precio}</td>
               </tr>
             );
           })}
@@ -51,6 +50,14 @@ class App extends Component {
       </div>
     );
   }
+
+  render() {
+    if (this.state.recuperado)
+      return this.mostrarTabla()
+    else
+      return (<div>recuperando datos...</div>)
+  }
+
 
 }
 
